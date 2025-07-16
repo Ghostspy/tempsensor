@@ -32,8 +32,6 @@ tft = st7735.ST7735(spi, 128, 128, cs=cs, dc=dc, reset=rst, rotation=2)
 tft.init()
 
 # === UI Colors ===
-from st7735 import ST7735
-
 RED = ST7735.color565(0, 0, 255)
 GREEN = ST7735.color565(0, 255, 0)
 BLUE = ST7735.color565(153, 0, 0)
@@ -41,25 +39,28 @@ WHITE = ST7735.color565(255, 255, 255)
 YELLOW = ST7735.color565(0, 255, 255)
 
 # === Load Background ===
-try:
-    with open("bg.raw", "rb") as f:
-        bg_data = bytearray(f.read())
-    bg_fb = framebuf.FrameBuffer(bg_data, 128, 128, framebuf.RGB565)
-except:
-    print("Missing bg.raw")
-    bg_data = None
+# try:
+#     with open("bg.raw", "rb") as f:
+#         bg_data = bytearray(f.read())
+#         print("bg.raw size:", len(bg_data))
+#         bg_fb = framebuf.FrameBuffer(bg_data, 128, 128, framebuf.RGB565)
+# except Exception as e:
+#     print("Error loading bg.raw:", e)
+#     bg_data = None
+def draw_background():
+    try:
+        with open("bg.raw", "rb") as f:
+            # Read the whole image (128x128 RGB565 = 32768 bytes)
+            buf = f.read(128 * 128 * 2)
+            tft.blit_buffer(buf, 0, 0, 128, 128)
+    except Exception as e:
+        print("Error drawing bg.raw:", e)
 
 # === Dim & Wake Logic ===
 DIM_TIMEOUT = 120  # seconds
 dimmed = False
 last_active = time.time()
 wake_button = Pin(1, Pin.IN, Pin.PULL_UP)
-
-def draw_background():
-    if bg_data:
-        tft.blit_buffer(bg_data, 0, 0, 128, 128)
-    else:
-        tft.fill(BLUE)
 
 def dim_display():
     global dimmed
