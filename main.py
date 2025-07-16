@@ -39,14 +39,6 @@ WHITE = ST7735.color565(255, 255, 255)
 YELLOW = ST7735.color565(0, 255, 255)
 
 # === Load Background ===
-# try:
-#     with open("bg.raw", "rb") as f:
-#         bg_data = bytearray(f.read())
-#         print("bg.raw size:", len(bg_data))
-#         bg_fb = framebuf.FrameBuffer(bg_data, 128, 128, framebuf.RGB565)
-# except Exception as e:
-#     print("Error loading bg.raw:", e)
-#     bg_data = None
 def draw_background():
     try:
         with open("bg.raw", "rb") as f:

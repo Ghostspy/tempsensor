@@ -50,7 +50,12 @@ def connect_wifi(ssid, password, timeout=15):
 
 # === Start Access Point with fallback config server ===
 def start_ap():
+    sta = network.WLAN(network.STA_IF)
+    sta.active(False)
+    time.sleep(1)
     ap = network.WLAN(network.AP_IF)
+    ap.active(False)
+    time.sleep(0.5)
     ap.active(True)
     ap.config(essid=AP_SSID, password=AP_PASSWORD, authmode=network.AUTH_WPA_WPA2_PSK)
     print(f"Started AP mode: {AP_SSID}")
